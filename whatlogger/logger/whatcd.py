@@ -1,4 +1,3 @@
-import os
 import time
 import hashlib
 
@@ -186,8 +185,8 @@ class WhatLogger(result.Logger):
                 lines.append("      Cannot be verified as accurate "
                              "(confidence %d), [%08X], "
                              "AccurateRip returned [%08x]" % (
-                                trackResult.ARDBConfidence,
-                                trackResult.ARCRC, trackResult.ARDBCRC))
+                                 trackResult.ARDBConfidence,
+                                 trackResult.ARCRC, trackResult.ARDBCRC))
         else:
             lines.append("      Track not present in AccurateRip database")
 

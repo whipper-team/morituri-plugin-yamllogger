@@ -1,5 +1,5 @@
 ## Status
-[![Build Status](https://travis-ci.org/JoeLametta/morituri-eaclogger.svg?branch=master)](https://travis-ci.org/JoeLametta/morituri-eaclogger)
+[![Build Status](https://travis-ci.org/JoeLametta/morituri-whatlogger.svg?branch=master)](https://travis-ci.org/JoeLametta/morituri-whatlogger)
 
 ## Using
 
