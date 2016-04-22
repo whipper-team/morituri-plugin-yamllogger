@@ -13,24 +13,12 @@ class WhatLogger(result.Logger):
     _errors = False
 
     def _framesToMSF(self, frames):
-        # format specifically for EAC log; examples (5:39.57)
         f = frames % common.FRAMES_PER_SECOND
         frames -= f
         s = (frames / common.FRAMES_PER_SECOND) % 60
         frames -= s * 60
         m = frames / common.FRAMES_PER_SECOND / 60
-        return "%2d:%02d.%02d" % (m, s, f)
-
-    def _framesToHMSH(self, frames):
-        # format specifically for EAC log; examples (0:00.00.70)
-        f = frames % common.FRAMES_PER_SECOND
-        frames -= f
-        s = (frames / common.FRAMES_PER_SECOND) % 60
-        frames -= s * 60
-        m = frames / common.FRAMES_PER_SECOND / 60
-        frames -= m * 60
-        h = frames / common.FRAMES_PER_SECOND / 60 / 60
-        return "%2d:%02d:%02d.%02d" % (h, m, s, f)
+        return "%02d:%02d.%02d" % (m, s, f)
 
     def log(self, ripResult, epoch=time.time()):
         lines = self.logRip(ripResult, epoch=epoch)
@@ -43,17 +31,16 @@ class WhatLogger(result.Logger):
         lines.append("Ripped at: %s" % date)
         lines.append("Drive: %s%s (revision %s)" %
                      (ripResult.vendor, ripResult.model, ripResult.release))
+        lines.append("")
+
         defeat = "Unknown"
         if ripResult.cdparanoiaDefeatsCache is True:
             defeat = "Yes"
         if ripResult.cdparanoiaDefeatsCache is False:
             defeat = "No"
-        lines.append("Defeat audio cache: %s" % defeat)
-        lines.append("")
-
-        lines.append("Read offset correction: %d" % ripResult.offset)
+        lines.append("Read offset correction: %d" % cmp(ripResult.offset, 0))
         # Currently unsupported by the official cdparanoia package
-        lines.append("Overread: No")
+        lines.append("Overread into lead-out: No")
         # Fully working only using the patched cdparanoia package
         # lines.append("Fill up missing offset samples with silence: Yes")
         lines.append("Gap detection: cdrdao %s" % ripResult.cdrdaoVersion)
@@ -78,7 +65,7 @@ class WhatLogger(result.Logger):
             htoastart = htoa.absolute
             htoaend = table.getTrackEnd(0)
             htoalength = table.tracks[0].getIndex(1).absolute - htoastart + 1
-            lines.append("  0:")
+            lines.append("  00:")
             lines.append("    Start: %s" % self._framesToMSF(htoastart))
             lines.append("    Length: %s" % self._framesToMSF(htoalength))
             lines.append("    Start sector: %d" % htoastart)
@@ -88,7 +75,7 @@ class WhatLogger(result.Logger):
             start = t.getIndex(1).absolute
             length = table.getTrackLength(t.number)
             end = table.getTrackEnd(t.number)
-            lines.append("  %d:" % t.number)
+            lines.append("  %02d:" % t.number)
             lines.append("    Start: %s" % self._framesToMSF(start))
             lines.append("    Length: %s" % self._framesToMSF(length))
             lines.append("    Start sector: %d" % start)
@@ -104,7 +91,7 @@ class WhatLogger(result.Logger):
             lines.append("")
             duration += t.testduration + t.copyduration
 
-        lines.append("AccurateRip Summary:")
+        lines.append("AccurateRip summary:")
         if self._inARDatabase == 0:
             lines.append("  None of the tracks are present in "
                          "the AccurateRip database")
@@ -127,7 +114,7 @@ class WhatLogger(result.Logger):
                 lines.append("  All tracks accurately ripped")
         lines.append("")
 
-        lines.append("Errors:")
+        lines.append("Health status:")
         if self._errors:
             lines.append("  There were errors")
         else:
@@ -138,34 +125,22 @@ class WhatLogger(result.Logger):
 
         hasher = hashlib.sha256()
         hasher.update("\n".join(lines).encode("utf-8"))
-        lines.append("Log checksum: %s" % hasher.hexdigest())
+        lines.append("Log hash: %s" % hasher.hexdigest())
         lines.append("")
         return lines
 
     def trackLog(self, trackResult):
         lines = []
-        lines.append("  %d:" % trackResult.number)
+        lines.append("  %02d:" % trackResult.number)
         lines.append("    Filename: %s" % trackResult.filename)
-        # EAC adds the 2 seconds to the first track pregap
         pregap = trackResult.pregap
-        # if trackResult.number == 1:
-        #     pregap += 2 * common.FRAMES_PER_SECOND
         if pregap:
-            lines.append("    Pre-gap length: %s" % self._framesToHMSH(pregap))
-        # EAC seems to format peak differently, truncating to the 3rd digit,
-        # and also calculating it against a max of 32767
-        # MBV - Feed me with your kiss: replaygain 0.809875,
-        # EAC's peak level 80.9 % instead of 90.0 %
+            lines.append("    Pre-gap length: %s" % self._framesToMSF(pregap))
         peak = trackResult.peak
-        # lines.append('     Peak level %r' % peak)
         lines.append("    Peak level: %.6f %%" % peak)
-        # level = "%.2f" % (trackResult.peak * 100.0)
-        # level = level[:-1]
-        # lines.append('     Peak level %s %%' % level)
         if trackResult.copyspeed:
             lines.append("    Extraction speed: %.1f X" % (
                 trackResult.copyspeed))
-        # Track quality is shown in secure mode
         if trackResult.quality and trackResult.quality > 0.001:
             lines.append("    Track quality: %.1f %%" %
                          (trackResult.quality * 100.0, ))
@@ -191,8 +166,8 @@ class WhatLogger(result.Logger):
             lines.append("      Track not present in AccurateRip database")
 
         if trackResult.testcrc == trackResult.copycrc:
-            lines.append("    Copy OK")
+            lines.append("    Status: Copy OK")
         else:
             self._errors = True
-            lines.append("    Error: CRC mismatch!")
+            lines.append("    Status: Error, CRC mismatch")
         return lines
