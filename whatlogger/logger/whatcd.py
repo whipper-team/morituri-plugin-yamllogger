@@ -38,6 +38,7 @@ class WhatLogger(result.Logger):
             defeat = "Yes"
         if ripResult.cdparanoiaDefeatsCache is False:
             defeat = "No"
+        lines.append("Defeat audio cache: %s" % defeat)
         lines.append("Read offset correction: %d" % cmp(ripResult.offset, 0))
         # Currently unsupported by the official cdparanoia package
         lines.append("Overread into lead-out: No")
