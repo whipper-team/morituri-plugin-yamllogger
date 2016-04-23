@@ -39,7 +39,7 @@ class WhatLogger(result.Logger):
         if ripResult.cdparanoiaDefeatsCache is False:
             defeat = "No"
         lines.append("Defeat audio cache: %s" % defeat)
-        lines.append("Read offset correction: %d" % cmp(ripResult.offset, 0))
+        lines.append("Read offset correction: %+d" % ripResult.offset)
         # Currently unsupported by the official cdparanoia package
         lines.append("Overread into lead-out: No")
         # Fully working only using the patched cdparanoia package
@@ -73,6 +73,7 @@ class WhatLogger(result.Logger):
             lines.append("    End sector: %d" % htoaend)
         for t in table.tracks:
             # FIXME: what happens to a track start over 60 minutes ?
+            # Answer: tested experimentally, everything seems OK
             start = t.getIndex(1).absolute
             length = table.getTrackLength(t.number)
             end = table.getTrackEnd(t.number)
@@ -92,41 +93,43 @@ class WhatLogger(result.Logger):
             lines.append("")
             duration += t.testduration + t.copyduration
 
-        lines.append("AccurateRip summary:")
+        lines.append("Informations:")
+        lines.append("  AccurateRip summary:")
         if self._inARDatabase == 0:
-            lines.append("  None of the tracks are present in "
+            lines.append("    Result: None of the tracks are present in "
                          "the AccurateRip database")
         else:
             nonHTOA = len(ripResult.tracks)
             if ripResult.tracks[0].number == 0:
                 nonHTOA -= 1
             if self._accuratelyRipped == 0:
-                lines.append("  No tracks could be verified as accurate")
-                lines.append("  You may have a different pressing "
+                lines.append("    Result: No tracks could be verified as "
+                             "accurate (you may have a different pressing "
                              "from the one(s) in the database")
             elif self._accuratelyRipped < nonHTOA:
-                lines.append("  %d track(s) accurately ripped" %
+                lines.append("    %d track(s) accurately ripped" %
                              self._accuratelyRipped)
-                lines.append("  %d track(s) could not be verified as "
+                lines.append("    %d track(s) could not be verified as "
                              "accurate" % (nonHTOA - self._accuratelyRipped))
                 lines.append("")
-                lines.append("  Some tracks could not be verified as accurate")
+                lines.append("    Some tracks could not be verified as "
+                             "accurate")
             else:
-                lines.append("  All tracks accurately ripped")
+                lines.append("    Result: All tracks accurately ripped")
         lines.append("")
 
-        lines.append("Health status:")
+        lines.append("  Health status:")
         if self._errors:
-            lines.append("  There were errors")
+            lines.append("    Result: There were errors")
         else:
-            lines.append("  No errors occurred")
+            lines.append("    Result: No errors occurred")
         lines.append("")
-        lines.append("End of status report")
+        lines.append("  EOF: End of status report")
         lines.append("")
 
         hasher = hashlib.sha256()
         hasher.update("\n".join(lines).encode("utf-8"))
-        lines.append("Log hash: %s" % hasher.hexdigest())
+        lines.append("SHA-256 hash: %s" % hasher.hexdigest().upper())
         lines.append("")
         return lines
 
@@ -143,7 +146,7 @@ class WhatLogger(result.Logger):
             lines.append("    Extraction speed: %.1f X" % (
                 trackResult.copyspeed))
         if trackResult.quality and trackResult.quality > 0.001:
-            lines.append("    Track quality: %.1f %%" %
+            lines.append("    Track quality: %.2f %%" %
                          (trackResult.quality * 100.0, ))
         if trackResult.testcrc is not None:
             lines.append("    Test CRC: %08X" % trackResult.testcrc)
@@ -153,18 +156,21 @@ class WhatLogger(result.Logger):
         if trackResult.accurip:
             self._inARDatabase += 1
             if trackResult.ARCRC == trackResult.ARDBCRC:
+                lines.append("      Result: Found, exact match")
                 lines.append("      Confidence: %d" %
                              trackResult.ARDBConfidence)
                 lines.append("      Checksum: %08X" % trackResult.ARCRC)
                 self._accuratelyRipped += 1
             else:
+                lines.append("      Result: Found, no exact match")
                 lines.append("      Cannot be verified as accurate "
                              "(confidence %d), [%08X], "
                              "AccurateRip returned [%08x]" % (
                                  trackResult.ARDBConfidence,
                                  trackResult.ARCRC, trackResult.ARDBCRC))
         else:
-            lines.append("      Track not present in AccurateRip database")
+            lines.append("      Result: Track not present in "
+                         "AccurateRip database")
 
         if trackResult.testcrc == trackResult.copycrc:
             lines.append("    Status: Copy OK")
