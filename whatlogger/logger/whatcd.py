@@ -65,7 +65,7 @@ class WhatLogger(result.Logger):
             lines.append("    End sector: %d" % htoaend)
         for t in table.tracks:
             # FIXME: what happens to a track start over 60 minutes ?
-            # Answer: tested experimentally, everything seems OK
+            # Answer: tested empirically, everything seems OK
             start = t.getIndex(1).absolute
             length = table.getTrackLength(t.number)
             end = table.getTrackEnd(t.number)
@@ -160,7 +160,7 @@ class WhatLogger(result.Logger):
                              "AccurateRip returned [%08x]" % (
                                  trackResult.ARDBConfidence,
                                  trackResult.ARCRC, trackResult.ARDBCRC))
-        else:
+        elif trackResult.number != 0:
             lines.append("      Result: Track not present in "
                          "AccurateRip database")
 
