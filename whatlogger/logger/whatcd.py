@@ -28,13 +28,13 @@ class WhatLogger(result.Logger):
         defeat = "Unknown"
         if ripResult.cdparanoiaDefeatsCache is True:
             defeat = "Yes"
-        if ripResult.cdparanoiaDefeatsCache is False:
+        elif ripResult.cdparanoiaDefeatsCache is False:
             defeat = "No"
         lines.append("Defeat audio cache: %s" % defeat)
         lines.append("Read offset correction: %+d" % ripResult.offset)
         # Currently unsupported by the official cdparanoia package
         lines.append("Overread into lead-out: No")
-        # Fully working only using the patched cdparanoia package
+        # Next one fully works only using the patched cdparanoia package
         # lines.append("Fill up missing offset samples with silence: Yes")
         lines.append("Gap detection: cdrdao %s" % ripResult.cdrdaoVersion)
         lines.append("")
