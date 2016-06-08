@@ -144,8 +144,8 @@ class WhatLogger(result.Logger):
             lines.append("    Test CRC: %08X" % trackResult.testcrc)
         if trackResult.copycrc is not None:
             lines.append("    Copy CRC: %08X" % trackResult.copycrc)
-        lines.append("    AccurateRip v1:")
         if trackResult.accurip:
+            lines.append("    AccurateRip v1:")
             self._inARDatabase += 1
             if trackResult.ARCRC == trackResult.ARDBCRC:
                 lines.append("      Result: Found, exact match")
@@ -161,6 +161,7 @@ class WhatLogger(result.Logger):
                                  trackResult.ARDBConfidence,
                                  trackResult.ARCRC, trackResult.ARDBCRC))
         elif trackResult.number != 0:
+            lines.append("    AccurateRip v1:")
             lines.append("      Result: Track not present in "
                          "AccurateRip database")
 
