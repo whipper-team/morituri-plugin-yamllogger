@@ -6,7 +6,7 @@ from morituri.configure import configure
 from morituri.result import result
 
 
-class WhatLogger(result.Logger):
+class YamlLogger(result.Logger):
 
     _accuratelyRipped = 0
     _inARDatabase = 0
