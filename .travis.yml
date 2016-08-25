@@ -14,5 +14,5 @@ install:
   - pip install flake8
 
 script:
-  - flake8 --max-complexity 15 yamllogger/logger/yaml.py
+  - flake8 --max-complexity 20 yamllogger/logger/yaml.py
   - python setup.py bdist_egg
