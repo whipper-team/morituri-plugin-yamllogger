@@ -53,7 +53,7 @@ class YamlLogger(result.Logger):
         try:
             # Only implemented in whipper (ripResult.overread)
             if ripResult.overread:
-            over = "Yes"
+                over = "Yes"
         except NameError:
             pass
         lines.append("  Overread into lead-out: %s" % over)

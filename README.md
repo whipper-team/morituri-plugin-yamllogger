@@ -37,3 +37,33 @@ To use this plugin:
 To use the plugin while developing uninstalled:
 
     python2 setup.py develop --install-dir=path/to/checkout/of/morituri
+
+This plugin tries to stay very close to whipper's internal logger. Here you can find the diff report between the two:
+
+```diff
+--- whipper/morituri/result/logger.py
++++ morituri-yamllogger/yamllogger/logger/yaml.py
+@@ -9 +9 @@
+-class MorituriLogger(result.Logger):
++class YamlLogger(result.Logger):
+@@ -27,3 +27,6 @@
+-        # Only implemented in whipper (ripResult.logger)
+-        lines.append("Log created by: whipper %s (%s logger)" % (
+-                    configure.version, ripResult.logger))
++        try:
++            # Only implemented in whipper (ripResult.logger)
++            lines.append("Log created by: whipper %s (%s logger)" % (
++                        configure.version, ripResult.logger))
++        except NameError:
++            lines.append("Log created by: morituri %s" % (configure.version))
+@@ -50,3 +53,6 @@
+-        # Only implemented in whipper (ripResult.overread)
+-        if ripResult.overread:
+-            over = "Yes"
++        try:
++            # Only implemented in whipper (ripResult.overread)
++            if ripResult.overread:
++                over = "Yes"
++        except NameError:
++            pass
+```
