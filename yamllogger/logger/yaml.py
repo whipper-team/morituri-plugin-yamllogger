@@ -185,7 +185,7 @@ class YamlLogger(result.Logger):
 
         # Peak level
         peak = trackResult.peak
-        lines.append("    Peak level: %.6f %" % peak)
+        lines.append("    Peak level: %.6f" % peak)
 
         # Extraction speed
         if trackResult.copyspeed:
