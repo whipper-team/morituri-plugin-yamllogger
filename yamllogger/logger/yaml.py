@@ -24,12 +24,7 @@ class YamlLogger(result.Logger):
         lines = []
 
         # Ripper version
-        try:
-            # Only implemented in whipper (ripResult.logger)
-            lines.append("Log created by: whipper %s (%s logger)" % (
-                        configure.version, ripResult.logger))
-        except NameError:
-            lines.append("Log created by: morituri %s" % (configure.version))
+        lines.append("Log created by: morituri %s" % (configure.version))
 
         # Rip date
         date = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime(epoch)).strip()
@@ -50,12 +45,6 @@ class YamlLogger(result.Logger):
         lines.append("  Read offset correction: %+d" % ripResult.offset)
         # Currently unsupported by the official cdparanoia package
         over = "No"
-        try:
-            # Only implemented in whipper (ripResult.overread)
-            if ripResult.overread:
-                over = "Yes"
-        except NameError:
-            pass
         lines.append("  Overread into lead-out: %s" % over)
         # Next one fully works only using the patched cdparanoia package
         # lines.append("Fill up missing offset samples with silence: Yes")
