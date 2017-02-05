@@ -24,7 +24,8 @@ class YamlLogger(result.Logger):
         lines = []
 
         # Ripper version
-        lines.append("Log created by: morituri %s" % (configure.version))
+        lines.append("Log created by: morituri %s (yaml logger)" %
+                     configure.version)
 
         # Rip date
         date = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime(epoch)).strip()
@@ -175,6 +176,11 @@ class YamlLogger(result.Logger):
         # Peak level
         peak = trackResult.peak
         lines.append("    Peak level: %.6f" % peak)
+
+        # Pre-emphasis status
+        preEmph = "Unknown"
+        # Only implemented in whipper (t.pre_emphasis)
+        lines.append("    Pre-emphasis: %s" % preEmph)
 
         # Extraction speed
         if trackResult.copyspeed:
