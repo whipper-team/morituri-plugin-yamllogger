@@ -44,23 +44,13 @@ class YamlLogger(result.Logger):
             defeat = "No"
         lines.append("  Defeat audio cache: %s" % defeat)
         lines.append("  Read offset correction: %+d" % ripResult.offset)
-        # Currently unsupported by the official cdparanoia package
-        over = "No"
-        lines.append("  Overread into lead-out: %s" % over)
+        # Unsupported by the official cdparanoia package and morituri
+        lines.append("  Overread into lead-out: not supported in morituri")
         # Next one fully works only using the patched cdparanoia package
         # lines.append("Fill up missing offset samples with silence: Yes")
         lines.append("  Gap detection: cdrdao %s" % ripResult.cdrdaoVersion)
-        lines.append("")
-
-        # Rip encoding settings
-        lines.append("Encoding phase information:")
-        lines.append("  Used output format: %s" % ripResult.profileName)
-        lines.append("  GStreamer:")
-        lines.append("    Pipeline: %s" % ripResult.profilePipeline)
-        lines.append("    Version: %s" % ripResult.gstreamerVersion)
-        lines.append("    Python version: %s" % ripResult.gstPythonVersion)
-        lines.append("    Encoder plugin version: %s" %
-                     ripResult.encoderVersion)
+        # CD-R Detection (only implemented in whipper)
+        lines.append("  CD-R detected: not supported in morituri")
         lines.append("")
 
         # CD metadata
@@ -138,7 +128,7 @@ class YamlLogger(result.Logger):
                 accurateTracks = nonHTOA - self._accuratelyRipped
                 lines.append("%s Some tracks could not be verified as "
                              "accurate (%d/%d got no match)" % (
-                              arHeading, accurateTracks, nonHTOA))
+                                 arHeading, accurateTracks, nonHTOA))
             else:
                 lines.append("%s All tracks accurately ripped" % arHeading)
 
@@ -177,10 +167,8 @@ class YamlLogger(result.Logger):
         peak = trackResult.peak
         lines.append("    Peak level: %.6f" % peak)
 
-        # Pre-emphasis status
-        preEmph = "Unknown"
-        # Only implemented in whipper (t.pre_emphasis)
-        lines.append("    Pre-emphasis: %s" % preEmph)
+        # Pre-emphasis status (only implemented in whipper)
+        lines.append("    Pre-emphasis: not supported in morituri")
 
         # Extraction speed
         if trackResult.copyspeed:
@@ -201,9 +189,9 @@ class YamlLogger(result.Logger):
             lines.append("    Copy CRC: %08X" % trackResult.copycrc)
 
         # AccurateRip track status
-        # Currently there's no support for AccurateRip V2
+        # There's no support for AccurateRip v2 in morituri
         if trackResult.accurip:
-            lines.append("    AccurateRip V1:")
+            lines.append("    AccurateRip v1:")
             self._inARDatabase += 1
             if trackResult.ARCRC == trackResult.ARDBCRC:
                 lines.append("      Result: Found, exact match")
@@ -214,10 +202,14 @@ class YamlLogger(result.Logger):
                          trackResult.ARDBConfidence)
             lines.append("      Local CRC: %08X" % trackResult.ARCRC)
             lines.append("      Remote CRC: %08X" % trackResult.ARDBCRC)
+            lines.append("    AccurateRip v2:")
+            lines.append("      Result: not supported in morituri")
         elif trackResult.number != 0:
-            lines.append("    AccurateRip V1:")
+            lines.append("    AccurateRip v1:")
             lines.append("      Result: Track not present in "
                          "AccurateRip database")
+            lines.append("    AccurateRip v2:")
+            lines.append("      Result: not supported in morituri")
 
         # Check if Test & Copy CRCs are equal
         if trackResult.testcrc == trackResult.copycrc:

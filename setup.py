@@ -1,8 +1,8 @@
-from setuptools import setup, find_packages
+from setuptools import setup
 
 setup(
     name="morituri-yamllogger",
-    version="0.0.2",
+    version="0.0.3",
     description="""morituri YAML style logger""",
     author="JoeLametta",
     packages=[
