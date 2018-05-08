@@ -1,6 +1,6 @@
 ## Status
 
-[![Build Status](https://travis-ci.org/JoeLametta/morituri-yamllogger.svg?branch=master)](https://travis-ci.org/JoeLametta/morituri-yamllogger)
+[![Build Status](https://travis-ci.com/JoeLametta/morituri-yamllogger.svg?branch=master)](https://travis-ci.com/JoeLametta/morituri-yamllogger)
 
 ## Logger information
 
