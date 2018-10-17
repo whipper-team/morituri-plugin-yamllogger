@@ -13,7 +13,7 @@ To use this plugin:
 * build it:
 
     ```bash
-    git clone https://github.com/JoeLametta/morituri-yamllogger.git
+    git clone https://github.com/whipper-team/morituri-yamllogger.git
     cd morituri-yamllogger
     python2 setup.py bdist_egg
     ```
