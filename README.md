@@ -1,20 +1,20 @@
 ## Status
 
-[![Build Status](https://travis-ci.com/whipper-team/morituri-yamllogger.svg?branch=master)](https://travis-ci.com/whipper-team/morituri-yamllogger)
+[![Build Status](https://travis-ci.com/whipper-team/morituri-plugin-yamllogger.svg?branch=master)](https://travis-ci.com/whipper-team/morituri-plugin-yamllogger)
 
 ## Logger information
 
 This logger was created in order to benefit morituri users. It provides whipper's improved logger structure in a way that's compatible with morituri.
 
-## Using instructions (valid only for morituri)
+## Instructions
 
 To use this plugin:
 
 * build it:
 
     ```bash
-    git clone https://github.com/whipper-team/morituri-yamllogger.git
-    cd morituri-yamllogger
+    git clone https://github.com/whipper-team/morituri-plugin-yamllogger.git
+    cd morituri-plugin-yamllogger
     python2 setup.py bdist_egg
     ```
 
@@ -47,11 +47,11 @@ To use the plugin while developing uninstalled:
 python2 setup.py develop --install-dir=path/to/checkout/of/morituri
 ```
 
-Yamllogger tries to stay very close to whipper's internal logger. Here you can find the diff report between the two:
+Yamllogger tries to stay very close to whipper's internal logger. Here you can find a diff report between the two:
 
 ```diff
 --- whipper/whipper/result/logger.py
-+++ morituri-yamllogger/yamllogger/logger/yaml.py
++++ morituri-plugin-yamllogger/yamllogger/logger/yaml.py
 @@ -1,13 +1,12 @@
  import time
  import hashlib
