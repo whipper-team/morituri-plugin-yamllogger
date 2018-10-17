@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name="morituri-yamllogger",
-    version="0.0.3",
+    version="0.1.0",
     description="""morituri YAML style logger""",
     author="JoeLametta",
     packages=[

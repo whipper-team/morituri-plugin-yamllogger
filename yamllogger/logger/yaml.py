@@ -36,6 +36,8 @@ class YamlLogger(result.Logger):
         lines.append("Ripping phase information:")
         lines.append("  Drive: %s%s (revision %s)" % (
             ripResult.vendor, ripResult.model, ripResult.release))
+        lines.append("  Extraction engine: cdparanoia %s" %
+                     ripResult.cdparanoiaVersion)
         if ripResult.cdparanoiaDefeatsCache is None:
             defeat = "Unknown"
         elif ripResult.cdparanoiaDefeatsCache:
@@ -44,13 +46,15 @@ class YamlLogger(result.Logger):
             defeat = "No"
         lines.append("  Defeat audio cache: %s" % defeat)
         lines.append("  Read offset correction: %+d" % ripResult.offset)
-        # Unsupported by the official cdparanoia package and morituri
-        lines.append("  Overread into lead-out: not supported in morituri")
+        # Unsupported by both the official cdparanoia package and morituri
+        # Feature implemented in whipper
+        lines.append("  Overread into lead-out: No "
+                     "(not supported in morituri)")
         # Next one fully works only using the patched cdparanoia package
         # lines.append("Fill up missing offset samples with silence: Yes")
         lines.append("  Gap detection: cdrdao %s" % ripResult.cdrdaoVersion)
         # CD-R Detection (only implemented in whipper)
-        lines.append("  CD-R detected: not supported in morituri")
+        lines.append("  CD-R detected: Unknown (not supported in morituri)")
         lines.append("")
 
         # CD metadata
@@ -168,7 +172,7 @@ class YamlLogger(result.Logger):
         lines.append("    Peak level: %.6f" % peak)
 
         # Pre-emphasis status (only implemented in whipper)
-        lines.append("    Pre-emphasis: not supported in morituri")
+        lines.append("    Pre-emphasis: Unknown (not supported in morituri)")
 
         # Extraction speed
         if trackResult.copyspeed:
@@ -190,6 +194,7 @@ class YamlLogger(result.Logger):
 
         # AccurateRip track status
         # There's no support for AccurateRip v2 in morituri
+        # AccurateRip v2 is supported in whipper
         if trackResult.accurip:
             lines.append("    AccurateRip v1:")
             self._inARDatabase += 1
@@ -209,7 +214,7 @@ class YamlLogger(result.Logger):
             lines.append("      Result: Track not present in "
                          "AccurateRip database")
             lines.append("    AccurateRip v2:")
-            lines.append("      Result: not supported in morituri")
+            lines.append("      Result: Unknown (not supported in morituri)")
 
         # Check if Test & Copy CRCs are equal
         if trackResult.testcrc == trackResult.copycrc:
