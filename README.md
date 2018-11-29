@@ -21,8 +21,8 @@ To use this plugin:
 * copy it to your plugin directory:
 
     ```bash
-    mkdir -p $HOME/.morituri/plugins
-    cp dist/morituri_*egg $HOME/.morituri/plugins
+    mkdir -p "$HOME/.morituri/plugins"
+    cp "dist/morituri_*egg" "$HOME/.morituri/plugins"
     ```
 
 * verify that it gets recognized:
@@ -50,7 +50,7 @@ python2 setup.py develop --install-dir=path/to/checkout/of/morituri
 Yamllogger tries to stay very close to whipper's internal logger. Here you can find a diff report between the two:
 
 ```diff
---- whipper/whipper/result/logger.py
+--- whipper/whipper/whipper/result/logger.py
 +++ morituri-plugin-yamllogger/yamllogger/logger/yaml.py
 @@ -1,13 +1,12 @@
  import time
@@ -76,7 +76,7 @@ Yamllogger tries to stay very close to whipper's internal logger. Here you can f
          # Ripper version
 -        lines.append("Log created by: whipper %s (internal logger)" %
 -                     whipper.__version__)
-+        lines.append("Log created by: morituri %s (yaml logger)" %
++        lines.append("Log created by: morituri %s (yaml logger 0.1.2)" %
 +                     configure.version)
  
          # Rip date
@@ -94,7 +94,7 @@ Yamllogger tries to stay very close to whipper's internal logger. Here you can f
 +        # Unsupported by both the official cdparanoia package and morituri
 +        # Feature implemented in whipper
 +        lines.append("  Overread into lead-out: No "
-+                     "(not supported in morituri)")
++                     "(unsupported in morituri)")
          # Next one fully works only using the patched cdparanoia package
          # lines.append("Fill up missing offset samples with silence: Yes")
          lines.append("  Gap detection: cdrdao %s" % ripResult.cdrdaoVersion)
@@ -104,11 +104,23 @@ Yamllogger tries to stay very close to whipper's internal logger. Here you can f
 -            isCdr = "No"
 -        lines.append("  CD-R detected: %s" % isCdr)
 +        # CD-R Detection (only implemented in whipper)
-+        lines.append("  CD-R detected: Unknown (not supported in morituri)")
++        lines.append("  CD-R detected: Unknown (unsupported in morituri)")
          lines.append("")
  
          # CD metadata
-@@ -174,16 +168,11 @@
+@@ -116,10 +110,7 @@
+         for t in ripResult.tracks:
+             if not t.filename:
+                 continue
+-            track_lines, ARDB_entry, ARDB_match = self.trackLog(t)
+-            self._inARDatabase += int(ARDB_entry)
+-            self._accuratelyRipped += int(ARDB_match)
+-            lines.extend(track_lines)
++            lines.extend(self.trackLog(t))
+             lines.append("")
+             duration += t.testduration + t.copyduration
+
+@@ -177,16 +168,11 @@
              lines.append("    Pre-gap length: %s" % common.framesToMSF(pregap))
  
          # Peak level
@@ -124,31 +136,33 @@ Yamllogger tries to stay very close to whipper's internal logger. Here you can f
 -            preEmph = "No"
 -        lines.append("    Pre-emphasis: %s" % preEmph)
 +        # Pre-emphasis status (only implemented in whipper)
-+        lines.append("    Pre-emphasis: Unknown (not supported in morituri)")
++        lines.append("    Pre-emphasis: Unknown (unsupported in morituri)")
  
          # Extraction speed
          if trackResult.copyspeed:
-@@ -204,29 +193,28 @@
+@@ -207,31 +193,28 @@
              lines.append("    Copy CRC: %08X" % trackResult.copycrc)
  
          # AccurateRip track status
--        for v in ('v1', 'v2'):
--            if trackResult.AR[v]['DBCRC']:
+-        ARDB_entry = 0
+-        ARDB_match = 0
+-        for v in ("v1", "v2"):
+-            if trackResult.AR[v]["DBCRC"]:
 -                lines.append("    AccurateRip %s:" % v)
--                self._inARDatabase += 1
--                if trackResult.AR[v]['CRC'] == trackResult.AR[v]['DBCRC']:
+-                ARDB_entry += 1
+-                if trackResult.AR[v]["CRC"] == trackResult.AR[v]["DBCRC"]:
 -                    lines.append("      Result: Found, exact match")
--                    self._accuratelyRipped += 1
+-                    ARDB_match += 1
 -                else:
 -                    lines.append("      Result: Found, NO exact match")
 -                lines.append(
--                    "      Confidence: %d" % trackResult.AR[v]['DBConfidence']
+-                    "      Confidence: %d" % trackResult.AR[v]["DBConfidence"]
 -                )
 -                lines.append(
--                    "      Local CRC: %s" % trackResult.AR[v]['CRC'].upper()
+-                    "      Local CRC: %s" % trackResult.AR[v]["CRC"].upper()
 -                )
 -                lines.append(
--                    "      Remote CRC: %s" % trackResult.AR[v]['DBCRC'].upper()
+-                    "      Remote CRC: %s" % trackResult.AR[v]["DBCRC"].upper()
 -                )
 -            elif trackResult.number != 0:
 -                lines.append("    AccurateRip %s:" % v)
@@ -170,14 +184,20 @@ Yamllogger tries to stay very close to whipper's internal logger. Here you can f
 +            lines.append("      Local CRC: %08X" % trackResult.ARCRC)
 +            lines.append("      Remote CRC: %08X" % trackResult.ARDBCRC)
 +            lines.append("    AccurateRip v2:")
-+            lines.append("      Result: not supported in morituri")
++            lines.append("      Result: Unknown (unsupported in morituri)")
 +        elif trackResult.number != 0:
 +            lines.append("    AccurateRip v1:")
 +            lines.append("      Result: Track not present in "
 +                         "AccurateRip database")
 +            lines.append("    AccurateRip v2:")
-+            lines.append("      Result: Unknown (not supported in morituri)")
++            lines.append("      Result: Unknown (unsupported in morituri)")
  
          # Check if Test & Copy CRCs are equal
          if trackResult.testcrc == trackResult.copycrc:
+@@ -239,4 +222,4 @@
+         else:
+             self._errors = True
+             lines.append("    Status: Error, CRC mismatch")
+-        return lines, bool(ARDB_entry), bool(ARDB_match)
++        return lines
 ```

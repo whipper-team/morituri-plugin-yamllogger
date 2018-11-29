@@ -24,7 +24,7 @@ class YamlLogger(result.Logger):
         lines = []
 
         # Ripper version
-        lines.append("Log created by: morituri %s (yaml logger)" %
+        lines.append("Log created by: morituri %s (yaml logger 0.1.2)" %
                      configure.version)
 
         # Rip date
@@ -49,12 +49,12 @@ class YamlLogger(result.Logger):
         # Unsupported by both the official cdparanoia package and morituri
         # Feature implemented in whipper
         lines.append("  Overread into lead-out: No "
-                     "(not supported in morituri)")
+                     "(unsupported in morituri)")
         # Next one fully works only using the patched cdparanoia package
         # lines.append("Fill up missing offset samples with silence: Yes")
         lines.append("  Gap detection: cdrdao %s" % ripResult.cdrdaoVersion)
         # CD-R Detection (only implemented in whipper)
-        lines.append("  CD-R detected: Unknown (not supported in morituri)")
+        lines.append("  CD-R detected: Unknown (unsupported in morituri)")
         lines.append("")
 
         # CD metadata
@@ -83,7 +83,7 @@ class YamlLogger(result.Logger):
             htoastart = htoa.absolute
             htoaend = table.getTrackEnd(0)
             htoalength = table.tracks[0].getIndex(1).absolute - htoastart
-            lines.append("  00:")
+            lines.append("  0:")
             lines.append("    Start: %s" % common.framesToMSF(htoastart))
             lines.append("    Length: %s" % common.framesToMSF(htoalength))
             lines.append("    Start sector: %d" % htoastart)
@@ -97,7 +97,7 @@ class YamlLogger(result.Logger):
             start = t.getIndex(1).absolute
             length = table.getTrackLength(t.number)
             end = table.getTrackEnd(t.number)
-            lines.append("  %02d:" % t.number)
+            lines.append("  %d:" % t.number)
             lines.append("    Start: %s" % common.framesToMSF(start))
             lines.append("    Length: %s" % common.framesToMSF(length))
             lines.append("    Start sector: %d" % start)
@@ -172,7 +172,7 @@ class YamlLogger(result.Logger):
         lines.append("    Peak level: %.6f" % peak)
 
         # Pre-emphasis status (only implemented in whipper)
-        lines.append("    Pre-emphasis: Unknown (not supported in morituri)")
+        lines.append("    Pre-emphasis: Unknown (unsupported in morituri)")
 
         # Extraction speed
         if trackResult.copyspeed:
@@ -208,13 +208,13 @@ class YamlLogger(result.Logger):
             lines.append("      Local CRC: %08X" % trackResult.ARCRC)
             lines.append("      Remote CRC: %08X" % trackResult.ARDBCRC)
             lines.append("    AccurateRip v2:")
-            lines.append("      Result: not supported in morituri")
+            lines.append("      Result: Unknown (unsupported in morituri)")
         elif trackResult.number != 0:
             lines.append("    AccurateRip v1:")
             lines.append("      Result: Track not present in "
                          "AccurateRip database")
             lines.append("    AccurateRip v2:")
-            lines.append("      Result: Unknown (not supported in morituri)")
+            lines.append("      Result: Unknown (unsupported in morituri)")
 
         # Check if Test & Copy CRCs are equal
         if trackResult.testcrc == trackResult.copycrc:
