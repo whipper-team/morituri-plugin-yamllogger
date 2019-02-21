@@ -1,8 +1,8 @@
 ## Status
 
-[![License](https://img.shields.io/github/license/whipper-team/whipper-plugin-yamllogger.svg)](https://github.com/whipper-team/whipper-plugin-yamllogger/blob/master/LICENSE)
-[![Build Status](https://travis-ci.com/whipper-team/whipper-plugin-yamllogger.svg?branch=master)](https://travis-ci.com/whipper-team/whipper-plugin-yamllogger)
-[![GitHub (pre-)release](https://img.shields.io/github/release/whipper-team/whipper-plugin-yamllogger/all.svg)](https://github.com/whipper-team/whipper-plugin-yamllogger/releases/latest)
+[![License](https://img.shields.io/github/license/whipper-team/morituri-plugin-yamllogger.svg)](https://github.com/whipper-team/morituri-plugin-yamllogger/blob/master/LICENSE)
+[![Build Status](https://travis-ci.com/whipper-team/morituri-plugin-yamllogger.svg?branch=master)](https://travis-ci.com/whipper-team/morituri-plugin-yamllogger)
+[![GitHub (pre-)release](https://img.shields.io/github/release/whipper-team/morituri-plugin-yamllogger/all.svg)](https://github.com/whipper-team/morituri-plugin-yamllogger/releases/latest)
 
 ## Logger information
 
