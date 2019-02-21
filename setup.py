@@ -1,5 +1,5 @@
 from setuptools import setup
-from eaclogger import __version__ as plugin_version
+from yamllogger import __version__ as plugin_version
 
 setup(
     name="morituri-plugin-yamllogger",
