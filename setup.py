@@ -1,14 +1,18 @@
 from setuptools import setup
+from eaclogger import __version__ as plugin_version
 
 setup(
     name="morituri-plugin-yamllogger",
-    version="0.1.2",
-    description="""morituri YAML style logger""",
+    version=plugin_version,
+    description="A plugin for whipper which provides YAML style log reports",
     author="JoeLametta",
-    packages=[
-        'yamllogger',
-        'yamllogger.logger'],
-    entry_points="""
-  [morituri.logger]
-  yaml = yamllogger.logger.yaml:YamlLogger
-  """)
+    maintainer="JoeLametta",
+    license="ISC License",
+    url="https://github.com/whipper-team/whipper-plugin-yamllogger",
+    packages=['yamllogger', 'yamllogger.logger'],
+    entry_points={
+        "morituri.logger": [
+            "yaml = yamllogger.logger.yaml:YamlLogger"
+        ]
+    }
+)

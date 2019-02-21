@@ -1,3 +1,4 @@
+import yamllogger
 import time
 import hashlib
 
@@ -24,8 +25,8 @@ class YamlLogger(result.Logger):
         lines = []
 
         # Ripper version
-        lines.append("Log created by: morituri %s (yaml logger 0.1.2)" %
-                     configure.version)
+        lines.append("Log created by: morituri %s (yaml logger %s)" % (
+                     configure.version, yamllogger.__version__))
 
         # Rip date
         date = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime(epoch)).strip()
@@ -59,7 +60,8 @@ class YamlLogger(result.Logger):
 
         # CD metadata
         lines.append("CD metadata:")
-        lines.append("  Album: %s - %s" % (ripResult.artist, ripResult.title))
+        lines.append("  Release: %s - %s" % (
+                     ripResult.artist, ripResult.title))
         lines.append("  CDDB Disc ID: %s" % ripResult. table.getCDDBDiscId())
         lines.append("  MusicBrainz Disc ID: %s" %
                      ripResult. table.getMusicBrainzDiscId())
@@ -92,8 +94,6 @@ class YamlLogger(result.Logger):
 
         # For every track include information in the TOC
         for t in table.tracks:
-            # FIXME: what happens to a track start over 60 minutes ?
-            # Answer: tested empirically, everything seems OK
             start = t.getIndex(1).absolute
             length = table.getTrackLength(t.number)
             end = table.getTrackEnd(t.number)
@@ -157,7 +157,7 @@ class YamlLogger(result.Logger):
         lines = []
 
         # Track number
-        lines.append("  %02d:" % trackResult.number)
+        lines.append("  %d:" % trackResult.number)
 
         # Filename (including path) of ripped track
         lines.append("    Filename: %s" % trackResult.filename)
