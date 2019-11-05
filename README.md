@@ -4,6 +4,8 @@
 [![Build Status](https://travis-ci.com/whipper-team/morituri-plugin-yamllogger.svg?branch=master)](https://travis-ci.com/whipper-team/morituri-plugin-yamllogger)
 [![GitHub (pre-)release](https://img.shields.io/github/release/whipper-team/morituri-plugin-yamllogger/all.svg)](https://github.com/whipper-team/morituri-plugin-yamllogger/releases/latest)
 
+**NOTICE: UNMANTAINED**
+
 ## Logger information
 
 This logger was created in order to benefit morituri users. It provides [whipper](https://github.com/whipper-team/whipper)'s improved logger structure (in YAML format) in a way that's compatible with morituri.
