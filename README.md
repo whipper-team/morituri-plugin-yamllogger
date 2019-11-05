@@ -4,7 +4,7 @@
 [![Build Status](https://travis-ci.com/whipper-team/morituri-plugin-yamllogger.svg?branch=master)](https://travis-ci.com/whipper-team/morituri-plugin-yamllogger)
 [![GitHub (pre-)release](https://img.shields.io/github/release/whipper-team/morituri-plugin-yamllogger/all.svg)](https://github.com/whipper-team/morituri-plugin-yamllogger/releases/latest)
 
-**NOTICE: UNMANTAINED**
+**NOTICE: UNMAINTAINED**
 
 ## Logger information
 
